@@ -13,4 +13,6 @@ initcode.out
 kernel
 kernelmemfs
 mkfs
-.gdbinit
+.gdb_history
+peda-*
+serial.log

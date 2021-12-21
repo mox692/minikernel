@@ -21,7 +21,7 @@ bootmain(void)
   struct proghdr *ph, *eph;
   void (*entry)(void);
   uchar* pa;
-
+//  0x80480d0
   // MEMO: kernelのload先っぽい、ここの0x10000も決め打ち？
   elf = (struct elfhdr*)0x10000;  // scratch space
 

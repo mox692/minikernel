@@ -17,9 +17,10 @@ LDFLAGS += -m $(shell $(LD) -V | grep elf_i386 2>/dev/null | head -n 1)
 OBJDUMP = objdump
 OBJCOPY = objcopy
 
-minikernel.img: bootblock;
+minikernel.img: bootblock kernel;
 	dd if=/dev/zero of=minikernel.img count=10000
 	dd if=bootblock of=minikernel.img conv=notrunc
+	dd if=kernel of=minikernel.img seek=1 conv=notrunc
 
 bootblock: bootasm.S bootmain.c;
 	$(CC) $(CFLAGS) -fno-pic -O -nostdinc -I. -c bootmain.c
@@ -29,14 +30,45 @@ bootblock: bootasm.S bootmain.c;
 	$(OBJCOPY) -S -O binary -j .text bootblock.o bootblock
 	./sign.pl bootblock
 
+kernel: kernelmain.c
+	$(CC) $(CFLAGS) -fno-pic -O -nostdinc -I. -c kernelmain.c -o kernelmain.o 
+	$(LD) $(LDFLAGS) -N -e main -o kernel kernelmain.o
+
 QEMU = qemu-system-i386
 QEMUOPTS = -drive file=minikernel.img,index=0,media=disk,format=raw -m 512  # fsimgはまだ入れてない
 qemu: minikernel.img;
 	$(QEMU) -serial mon:stdio $(QEMUOPTS)
 
+# QEMU's gdb stub command line changed in 0.11
+QEMUGDB = $(shell if $(QEMU) -help | grep -q '^-gdb'; \
+	then echo "-gdb tcp::$(GDBPORT)"; \
+	else echo "-s -p $(GDBPORT)"; fi)
+GDBPORT = $(shell expr `id -u` % 5000 + 25000)
+.gdbinit: .gdbinit.tmpl
+	sed "s/localhost:1234/localhost:$(GDBPORT)/" < $^ > $@
+
+qemu-nox-gdb: minikernel.img .gdbinit
+	@echo "*** Now run 'gdb'." 1>&2
+	$(QEMU) -nographic $(QEMUOPTS) -S $(QEMUGDB)
 
 clean:;
 	rm -f *.tex *.dvi *.idx *.aux *.log *.ind *.ilg \
 	*.o *.d *.asm *.sym vectors.S bootblock entryother \
 	initcode initcode.out kernel xv6.img fs.img kernelmemfs \
 	xv6memfs.img mkfs .gdbinit minikernel.img \
+
+rq:;
+	make clean
+	make qemu
+
+rgq:;
+	make clean
+	make qemu-nox-gdb
+
+# 実際に叩くことはない、gdbのutilコマンド等
+gdbin:;
+# GDB Commands... (MEMO: extended-remote modeについて https://sourceware.org/gdb/onlinedocs/gdb/Connecting.html)
+	target (extended-)remote localhost:25000
+	b main
+	la src
+	c
