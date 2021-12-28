@@ -1,25 +1,14 @@
+#include "x86.h"
+#include "types.h"
 
-const int COM1 = 0x3f8;
-int foo() {
-    asm volatile("nop");
-    asm volatile("out %0,%1" : : "a" (COM1), "d" (1));
-    asm volatile("nop");
-    return 0;
-}
-int add(int a, int b) {
-    asm volatile("nop");
-    return a + b;
-}
-int sub() {
-    asm volatile("nop");
-    int a = add(3,5);
-    asm volatile("nop");
-    return a;
-}
+extern void print_str(char*);
+extern void print_int(int);
+
 int main() {
-    // Emulate `outb(COM1+2, 0);`
-    asm volatile("nop");
-    foo();
-    asm volatile("nop");
-    sub();
+    char *str = "aaaaaaa";
+
+    print_str(str);
+    print_str("\n");
+    print_int(2500);
+    return 0;
 }
