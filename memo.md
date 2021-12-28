@@ -35,3 +35,13 @@
   * 目標: debuggerを繋ぎ込んで、mainに処理が入ってるのが見えるようにする
   * 結果: 一応kernelmain.cのmain()には処理が届いてたみたいw
 
+* 12/28
+  * 文字をkernel上に表示できるように
+    * uartputc()を実装する
+      * そのためにはioapicの設定が必要そう
+        * cgaputc(), consputc(), uartputc()の実装
+  * なんかターミナルにでるlogとxquartsを通して出されるログは違うみたい
+    * 具体的にはserial outputはterminalの方にしかでないっぽい
+  * 意外とすんなり文字出力できた
+    * 0x3f8に文字コード送るだけで本当にそのまま出力できたw
+

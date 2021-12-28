@@ -1,3 +1,4 @@
+OBJS = print.o
 
 CC = gcc
 # MEMO:
@@ -30,9 +31,9 @@ bootblock: bootasm.S bootmain.c;
 	$(OBJCOPY) -S -O binary -j .text bootblock.o bootblock
 	./sign.pl bootblock
 
-kernel: kernelmain.c
+kernel: $(OBJS) kernelmain.c
 	$(CC) $(CFLAGS) -fno-pic -O -nostdinc -I. -c kernelmain.c -o kernelmain.o 
-	$(LD) $(LDFLAGS) -N -e main -o kernel kernelmain.o
+	$(LD) $(LDFLAGS) -N -e main -o kernel kernelmain.o $(OBJS)
 
 QEMU = qemu-system-i386
 QEMUOPTS = -drive file=minikernel.img,index=0,media=disk,format=raw -m 512  # fsimgはまだ入れてない
@@ -61,14 +62,15 @@ rq:;
 	make clean
 	make qemu
 
-rgq:;
+gdb:;
 	make clean
 	make qemu-nox-gdb
 
 # 実際に叩くことはない、gdbのutilコマンド等
 gdbin:;
+	// gdb kernel
 # GDB Commands... (MEMO: extended-remote modeについて https://sourceware.org/gdb/onlinedocs/gdb/Connecting.html)
-	target (extended-)remote localhost:25000
+	target remote localhost:25000
 	b main
 	la src
 	c
