@@ -1,6 +1,8 @@
-OBJS = print.o
+OBJS = print.o int.o trap_vectors.o ioapic.o segment.o
 
 CC = gcc
+AS = gas
+
 # MEMO:
 #  -fno-pie https://stackoverflow.com/questions/47778099/what-is-no-pie-used-for
 CFLAGS = -fno-pic -static -fno-builtin -fno-strict-aliasing -O2 -Wall -MD -ggdb -m32 -Werror -fno-omit-frame-pointer
@@ -12,6 +14,7 @@ endif
 ifneq ($(shell $(CC) -dumpspecs 2>/dev/null | grep -e '[^f]nopie'),)
 CFLAGS += -fno-pie -nopie
 endif
+ASFLAGS = -m32 -gdwarf-2 -Wa,-divide
 
 LD = ld
 LDFLAGS += -m $(shell $(LD) -V | grep elf_i386 2>/dev/null | head -n 1)
@@ -58,7 +61,7 @@ clean:;
 	initcode initcode.out kernel xv6.img fs.img kernelmemfs \
 	xv6memfs.img mkfs .gdbinit minikernel.img \
 
-rq:;
+q:;
 	make clean
 	make qemu
 

@@ -1,4 +1,5 @@
 #include "x86.h"
+#include "print.h"
 
 #define COM1 0x3f8
 

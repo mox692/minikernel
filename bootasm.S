@@ -1,6 +1,7 @@
 #include "asm.h"
 #include "memlayout.h"
 #include "mmu.h"
+#include "int.h"
 
 # Start the first CPU: switch to 32-bit protected mode, jump into C.
 # The BIOS loads this code from the first sector of the hard disk into

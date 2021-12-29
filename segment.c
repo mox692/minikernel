@@ -1,0 +1,2 @@
+
+void seg_init() {}
