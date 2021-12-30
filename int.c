@@ -8,7 +8,12 @@ void default_handler() {
     for(;;);
 }
 
-extern void kbd_handler();
+// extern void kbd_handler();
+// TODO: 割り込みに対応させる
+void kbd_handler() {
+    print_str("handler called!!!\n");
+    for(;;);
+}
 
 inline void
 lidt(struct gatedesc *p, int size)

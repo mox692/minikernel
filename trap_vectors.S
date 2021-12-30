@@ -1,6 +1,5 @@
 #include "int.h"
 
-.globl kbd_handler
 kbd_handler:
   pushl $0
   pushl $0
