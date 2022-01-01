@@ -14,5 +14,6 @@ kernel
 kernelmemfs
 mkfs
 .gdb_history
+.vscode
 peda-*
 serial.log

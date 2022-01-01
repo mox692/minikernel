@@ -1,14 +1,22 @@
 #include "x86.h"
 #include "types.h"
+#include "print.h"
+#include "kbd.h"
 
-extern void print_str(char*);
-extern void print_int(int);
+extern void int_init();
+extern void seg_init();
+extern void ioapic_init();
 
 int main() {
-    char *str = "aaaaaaa";
+    seg_init();
+    int_init();
+    ioapic_init();
+    print_str("\nBoot Success \\ ^ _ ^ /\n");
+    print_str("Input key...\n");
 
-    print_str(str);
-    print_str("\n");
-    print_int(2500);
-    return 0;
+    // 無限loop
+    while (1) {
+		char c = getc();
+        print_int(c);
+	}
 }
