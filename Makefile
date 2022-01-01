@@ -1,4 +1,4 @@
-OBJS = print.o int.o trap_vectors.o ioapic.o segment.o
+OBJS = print.o int.o trap_vectors.o ioapic.o segment.o kbd.o
 
 CC = gcc
 AS = gas

@@ -1,1 +1,3 @@
-void ioapic_init() {}
+void ioapic_init() {
+    // ioapic = (volatile struct ioapic*)IOAPIC;
+}

@@ -58,4 +58,10 @@
     * picの設定
       * picをdisableにして、ioapicの設定wpする
     * を行う
+* 12/30
+  * idtの設定を大体した(動くかしらんけど)
+  * io/apicについてもう少し調べる
+    * https://wiki.osdev.org/IOAPIC
+    * みかん本
+
 

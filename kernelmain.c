@@ -1,6 +1,7 @@
 #include "x86.h"
 #include "types.h"
 #include "print.h"
+#include "kbd.h"
 
 extern void int_init();
 extern void seg_init();
@@ -11,7 +12,11 @@ int main() {
     int_init();
     ioapic_init();
     print_str("\nBoot Success \\ ^ _ ^ /\n");
+    print_str("Input key...\n");
 
     // 無限loop
-    for(;;);
+    while (1) {
+		char c = getc();
+        print_int(c);
+	}
 }
