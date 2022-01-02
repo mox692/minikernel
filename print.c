@@ -17,6 +17,11 @@ print_str(char *str) {
     }
 }
 
+void
+print_char(char c) {
+  uartputc((int)c);
+}
+
 void 
 print_int(int n) {
   // intの最大の桁数

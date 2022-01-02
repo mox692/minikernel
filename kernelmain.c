@@ -16,7 +16,7 @@ int main() {
 
     // 無限loop
     while (1) {
-		char c = getc();
-        print_int(c);
-	}
+		  char c = getc();
+      print_char(c);
+	  }
 }
